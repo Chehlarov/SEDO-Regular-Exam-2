@@ -1,52 +1,25 @@
 pipeline {
     agent any
 
-    tools {
-        dotnetsdk 'dotnet-sdk-8.0'  // Requires Jenkins .NET SDK tool configuration
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Checkout the project') {
             steps {
                 checkout scm
             }
         }
-        stage('Restore') {
+        stage('Restore the project') {
             steps {
-                script {
-                    if (isUnix()) {
-                        sh 'dotnet restore'
-                    } else {
-                        bat 'dotnet restore'
-                    }
-                }
+                bat 'dotnet restore'
             }
         }
-        stage('Build') {
+        stage('Build the project') {
             steps {
-                script {
-                    if (isUnix()) {
-                        sh 'dotnet build --no-restore'
-                    } else {
-                        bat 'dotnet build --no-restore'
-                    }
-                }
+                bat 'dotnet build --no-restore'
             }
         }
-        stage('Test') {
+        stage('Test the project') {
             steps {
-                script {
-                    if (isUnix()) {
-                        sh 'dotnet test --no-build --verbosity normal'
-                    } else {
-                        bat 'dotnet test --no-build --verbosity normal'
-                    }
-                }
-            }
-            post {
-                always {
-                    junit '**/TestResults/*.trx'  // Publish test results
-                }
+                bat 'dotnet test --no-build --verbosity normal'
             }
         }
     }
