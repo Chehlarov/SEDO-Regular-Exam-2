@@ -1,10 +1,8 @@
 pipeline {
     agent any
-    tools {
-        dotnetsdk 'dotnet-sdk-8.0'
-    }
+
     stages {
-	    stage ('Checkout') {
+		stage ('Checkout the project') {
 			steps { 
 				checkout scm
 			}
